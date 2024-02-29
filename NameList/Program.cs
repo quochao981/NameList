@@ -66,33 +66,34 @@ class Program
                 {
                     Console.WriteLine($"{pair.Key}: {pair.Value}");
                 }
-            }
 
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                try
                 {
-                    connection.Open();
-
-                    // Insert each word and its count into a database table
-                    foreach (var pair in sortedWordCount)
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string sqlInsert = "INSERT INTO WordCounts (Word, Count) VALUES (@Word, @Count)";
-                        using (SqlCommand command = new SqlCommand(sqlInsert, connection))
+                        connection.Open();
+
+                        // Insert each word and its count into a database table
+                        foreach (var pair in sortedWordCount)
                         {
-                            command.Parameters.AddWithValue("@Word", pair.Key);
-                            command.Parameters.AddWithValue("@Count", pair.Value);
-                            command.ExecuteNonQuery();
+                            string sqlInsert = "INSERT INTO WordCounts (Word, Count) VALUES (@Word, @Count)";
+                            using (SqlCommand command = new SqlCommand(sqlInsert, connection))
+                            {
+                                command.Parameters.AddWithValue("@Word", pair.Key);
+                                command.Parameters.AddWithValue("@Count", pair.Value);
+                                command.ExecuteNonQuery();
+                            }
                         }
+                        Console.WriteLine("Data inserted into the database successfully.");
                     }
-                    Console.WriteLine("Data inserted into the database successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error inserting data into the database: {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error inserting data into the database: {ex.Message}");
-            }
-        }
+
+        }  
 
     }
 }
