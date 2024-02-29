@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualBasic;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 class Program
 {
@@ -15,7 +16,7 @@ class Program
         {
 
             // Instruction for user to input the list of names.
-            Console.WriteLine("Please enter a list of names, and then press Enter");
+            Console.WriteLine("Please enter a list of names, separated by commas.");
             input = Console.ReadLine();
 
 
@@ -54,36 +55,13 @@ class Program
                     }
                 }
 
-                List<string> mostCommonWords = new List<string>(); // Store the most common word(s) in the input names.
-                int maxCount = 0; // Store the maximum count of occurrences of any word in the input names.
+               var sortedWordCount = wordCount.OrderByDescending(pair => pair.Value);
 
-                // Loop through the word count dictionary.
-                foreach (var pair in wordCount)
+                //Print each word and its count
+                foreach (var pair in sortedWordCount)
                 {
-                    if (pair.Value > maxCount)
-                    {
-                        mostCommonWords.Clear(); // Clear previous most common words
-                        maxCount = pair.Value;
-                        mostCommonWords.Add(pair.Key);
-                    }
-                    else if (pair.Value == maxCount)
-                    {
-                        mostCommonWords.Add(pair.Key);
-                    }
+                    Console.WriteLine($"{pair.Key}: {pair.Value}");
                 }
-
-
-                //Print out most common word(s) that appeared in the list.
-                Console.Write("Most common word(s): ");
-                for (int i = 0; i < mostCommonWords.Count; i++)
-                {
-                    Console.Write(mostCommonWords[i]);
-                    if (i < mostCommonWords.Count - 1)
-                    {
-                        Console.Write(", ");
-                    }
-                }
-                Console.WriteLine($" appeared {maxCount} times in {nameList.Length} names");
             }
         }
     }
